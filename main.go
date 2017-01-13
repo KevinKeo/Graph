@@ -2,27 +2,39 @@ package main
 
 import (
 	"fmt"
-	. "github.com/kevin/graphe/graphutils"
+	. "github.com/kevin/Graph/graphutils"
 )
 
 func main() {
-	//var in IUndirectedGraph
+
 	graph := GenerateGraphData(4, 4, true)
-	c := AdjacencyMatrixUndirectedGraph{graph}
-	fmt.Println(c.IsEdge(0, 2))
-	adjacencyList := NewAdjacencyListUndirectedGraph(graph)
+	c := NewAdjacencyMatrixUndirectedGraph(graph)
+	fmt.Println("MatrixGraph")
+	printGraph(c.ToAdjacencyMatrix())
+	adjacencyList := NewAdjacencyListUndirectedGraph(c.ToAdjacencyMatrix())
 	fmt.Println(adjacencyList)
 	fmt.Println("graph adjancy list")
 	printGraph(adjacencyList.ToAdjacencyMatrix())
-	fmt.Println("remove")
-	adjacencyList.RemoveEdge(0, 2)
+	fmt.Println(c.IsEdge(0, 2))
+	fmt.Println("remove before", adjacencyList.NbEdges)
+	adjacencyList.RemoveEdge(0, 1)
+	fmt.Println("remove after", adjacencyList.NbEdges)
 	fmt.Println(adjacencyList)
 	printGraph(adjacencyList.ToAdjacencyMatrix())
 	fmt.Println("//////////////////////////////////////")
 	fmt.Println("add")
 	fmt.Println(adjacencyList)
-	adjacencyList.AddEdge(0, 2)
+	fmt.Println("add before", adjacencyList.NbEdges)
+	adjacencyList.AddEdge(0, 1)
+	fmt.Println("add after", adjacencyList.NbEdges)
+	fmt.Println(adjacencyList)
 	printGraph(adjacencyList.ToAdjacencyMatrix())
+
+	var in IUndirectedGraph
+	in = c
+	fmt.Println("Neighbors :", in.GetNeighbors(0))
+	in = adjacencyList
+	fmt.Println("Neighbors :", in.GetNeighbors(0))
 	/*fmt.Println("/////////////////////////////////")
 	in = c
 	printGraph(c.Matrice)
@@ -33,6 +45,14 @@ func main() {
 	fmt.Println("test")
 	c.RemoveEdge(0, 2)
 	printGraph(c.Matrice)*/
+	graph = GenerateGraphData(5, 5, false)
+	c = NewAdjacencyMatrixUndirectedGraph(graph)
+	fmt.Println(graph)
+	listDirected := NewAdjacencyListDirectGraph(graph)
+	fmt.Println("matrix")
+	printGraph(c.ToAdjacencyMatrix())
+	fmt.Println("list")
+	printGraph(listDirected.ToAdjacencyMatrix())
 
 }
 

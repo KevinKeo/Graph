@@ -1,5 +1,6 @@
 /*
-Package graph which provides a generic framework to manipulate simple graph
+Package graph provides a generic framework to manipulate simple graph
+Containing representation of different simple type of graphs and implements method to work with them
 */
 package graph
 
@@ -115,6 +116,15 @@ func GenerateGraphDataBis(n int, m int, s bool) (graph [][]int) {
 	}
 	return graph
 }
+
+/**
+//checkNodes check if node x and y are not superior to the nb of nodes, and not inferior to 0
+func checkNodes(x, y, length int) bool {
+	if x < 0 || y < 0 || x > length || y > length {
+		return false
+	}
+	return true
+}**/
 
 //toSymetric transform an matrice into an symetric matrice
 func toSymetric(matrice [][]int) (newmatrice [][]int) {
