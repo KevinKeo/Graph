@@ -35,6 +35,7 @@ func main() {
 	fmt.Println("Neighbors :", in.GetNeighbors(0))
 	in = adjacencyList
 	fmt.Println("Neighbors :", in.GetNeighbors(0))
+
 	/*fmt.Println("/////////////////////////////////")
 	in = c
 	printGraph(c.Matrice)
@@ -45,7 +46,7 @@ func main() {
 	fmt.Println("test")
 	c.RemoveEdge(0, 2)
 	printGraph(c.Matrice)*/
-	graph = GenerateGraphData(5, 5, false)
+	graph = GenerateGraphData(4, 6, false)
 	c = NewAdjacencyMatrixUndirectedGraph(graph)
 	fmt.Println(graph)
 	listDirected := NewAdjacencyListDirectGraph(graph)
@@ -53,6 +54,10 @@ func main() {
 	printGraph(c.ToAdjacencyMatrix())
 	fmt.Println("list")
 	printGraph(listDirected.ToAdjacencyMatrix())
+	fmt.Println(listDirected.GetSuccessors(1))
+	fmt.Println(listDirected.GetPredecessors(3))
+	fmt.Println("listinverse")
+	printGraph(listDirected.ComputeInverse().ToAdjacencyMatrix())
 
 }
 

@@ -4,14 +4,10 @@ Containing representation of different simple type of graphs and implements meth
 */
 package graph
 
-type couple struct {
-	s, p int
-}
-
 //AdjacencyListDirectGraph represents an directed graph in the form of an adjacency List
 type AdjacencyListDirectedGraph struct {
-	NbNodes, NbArcs      int
-	listNode, succ, pred []int
+	NbNodes, NbArcs int
+	listNode, succ  []int
 }
 
 //NewAdjacencyListDirectGraph create a new AdjacencyListDirectGraph's pointer
@@ -98,8 +94,8 @@ func (a *AdjacencyListDirectedGraph) AddArc(x int, y int) {
 			return
 		}
 	}
-	a.augmentNumberEdge(x, y)
-	a.NbEdges += 1
+	a.augmentNumberArc(x, y)
+	a.NbArcs += 1
 }
 
 //augmentNumberArc add an arc from x to y
@@ -125,7 +121,7 @@ func (a AdjacencyListDirectedGraph) GetSuccessors(x int) (successors []int) {
 	return successors
 }
 
-/*
+//GetPredecessors returns a new int representing predecessors of node x
 func (a AdjacencyListDirectedGraph) GetPredecessors(x int) (pred []int) {
 	if x < 0 || x > a.NbNodes {
 		return pred
@@ -133,11 +129,29 @@ func (a AdjacencyListDirectedGraph) GetPredecessors(x int) (pred []int) {
 	var position []int
 	for i, v := range a.succ {
 		if v == x {
-			position = append(position, v)
+			position = append(position, i)
 		}
 	}
 
-    for
+	for _, valPos := range position {
+		for i := 1; i < len(a.listNode); i++ {
+			if valPos < a.listNode[i] {
+				pred = append(pred, i-1)
+				break
+			}
+		}
+	}
+	return pred
+}
+
+//ComputeInverse returns the inverse of the graph
+func (a AdjacencyListDirectedGraph) ComputeInverse() IDirectedGraph {
+	var succ []int
+	nodes := make([]int, a.NbNodes+1)
+	for i := 0; i < a.NbNodes; i++ {
+		succ = append(succ, a.GetPredecessors(i)...)
+		nodes[i+1] = len(succ)
+	}
+	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ}
 
 }
-*/
