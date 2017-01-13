@@ -11,7 +11,7 @@ type AdjacencyListUndirectedGraph struct {
 }
 
 //NewAdjacencyListUndirectedGraph create a new AdjacencyListUndirectedGraph's pointer
-func NewAdjacencyListUndirectedGraph(generatedGraph [][]int) *AdjacencyListUndirectedGraph {
+func NewAdjacencyListUndirectedGraphWithMatrix(generatedGraph [][]int) *AdjacencyListUndirectedGraph {
 	nodes := make([]int, len(generatedGraph)+1)
 	var succ []int
 	for i, v := range generatedGraph {

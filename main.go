@@ -11,7 +11,7 @@ func main() {
 	c := NewAdjacencyMatrixUndirectedGraph(graph)
 	fmt.Println("MatrixGraph")
 	printGraph(c.ToAdjacencyMatrix())
-	adjacencyList := NewAdjacencyListUndirectedGraph(c.ToAdjacencyMatrix())
+	adjacencyList := NewAdjacencyListUndirectedGraphWithMatrix(c.ToAdjacencyMatrix())
 	fmt.Println(adjacencyList)
 	fmt.Println("graph adjancy list")
 	printGraph(adjacencyList.ToAdjacencyMatrix())
@@ -49,7 +49,7 @@ func main() {
 	graph = GenerateGraphData(4, 6, false)
 	c = NewAdjacencyMatrixUndirectedGraph(graph)
 	fmt.Println(graph)
-	listDirected := NewAdjacencyListDirectGraph(graph)
+	listDirected := NewAdjacencyListDirectedGraphWithMatrix(graph)
 	fmt.Println("matrix")
 	printGraph(c.ToAdjacencyMatrix())
 	fmt.Println("list")
@@ -58,6 +58,12 @@ func main() {
 	fmt.Println(listDirected.GetPredecessors(3))
 	fmt.Println("listinverse")
 	printGraph(listDirected.ComputeInverse().ToAdjacencyMatrix())
+
+	fmt.Println("list")
+	listDirected.RemoveArc(0, 1)
+	printGraph(listDirected.ToAdjacencyMatrix())
+
+	newList := NewAdjacencyListDirectedGraphWithInterface(listDirected)
 
 }
 
