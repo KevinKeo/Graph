@@ -14,15 +14,26 @@ type AdjacencyListUndirectedGraph struct {
 func NewAdjacencyListUndirectedGraphWithMatrix(generatedGraph [][]int) *AdjacencyListUndirectedGraph {
 	nodes := make([]int, len(generatedGraph)+1)
 	var succ []int
-	for i, v := range generatedGraph {
-		for j, v2 := range v {
-			if v2 == 1 {
+	for i, s := range generatedGraph {
+		for j, v := range s {
+			if v == 1 {
 				succ = append(succ, j)
 			}
 		}
 		nodes[i+1] = len(succ)
 	}
 	return &AdjacencyListUndirectedGraph{len(nodes) - 1, len(succ) / 2, nodes, succ}
+}
+
+//NewAdjacencyListUnirectedGraphWithInterface create a new AdjacencyListUndirectGraph's pointer
+func NewAdjacencyListUnirectedGraphWithInterface(undirectedGraph IUndirectedGraph) *AdjacencyListUndirectedGraph {
+	var succ []int
+	nodes := make([]int, undirectedGraph.GetNbNodes()+1)
+	for i := 0; i < undirectedGraph.GetNbNodes(); i++ {
+		succ = append(succ, undirectedGraph.GetNeighbors(i)...)
+		nodes[i+1] = len(succ)
+	}
+	return &AdjacencyListUndirectedGraph{undirectedGraph.GetNbNodes(), undirectedGraph.GetNbEdges(), nodes, succ}
 }
 
 //GetNbNodes return the number of Nodes of the graph

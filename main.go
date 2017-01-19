@@ -62,9 +62,12 @@ func main() {
 	fmt.Println("list")
 	listDirected.RemoveArc(0, 1)
 	printGraph(listDirected.ToAdjacencyMatrix())
-
+	fmt.Println("test")
+	printGraph(listDirected.ToAdjacencyMatrix())
 	newList := NewAdjacencyListDirectedGraphWithInterface(listDirected)
 
+	fmt.Println("test")
+	printGraph(newList.ToAdjacencyMatrix())
 }
 
 func printGraph(g [][]int) {

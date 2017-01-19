@@ -10,13 +10,13 @@ type AdjacencyListDirectedGraph struct {
 	listNode, succ  []int
 }
 
-//NewAdjacencyListDirectGraphParamMatrix create a new AdjacencyListDirectGraph's pointer
-func NewAdjacencyListDirectGraphWithMatrix(generatedGraph [][]int) *AdjacencyListDirectedGraph {
+//NewAdjacencyListDirectedGraphWithMatrix create a new AdjacencyListDirectGraph's pointer
+func NewAdjacencyListDirectedGraphWithMatrix(generatedGraph [][]int) *AdjacencyListDirectedGraph {
 	nodes := make([]int, len(generatedGraph)+1)
 	var succ []int
-	for i, array := range generatedGraph {
-		for j, v2 := range array {
-			if v2 == 1 {
+	for i, s := range generatedGraph {
+		for j, v := range s {
+			if v == 1 {
 				succ = append(succ, j)
 			}
 		}
@@ -25,8 +25,8 @@ func NewAdjacencyListDirectGraphWithMatrix(generatedGraph [][]int) *AdjacencyLis
 	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ}
 }
 
-//NewAdjacencyListDirectGraphParamInterface create a new AdjacencyListDirectGraph's pointer
-func NewAdjacencyListDirectGraphWithInterface(directedGraph IDirectedGraph) *AdjacencyListDirectedGraph {
+//NewAdjacencyListDirectedGraphWithInterface create a new AdjacencyListDirectGraph's pointer
+func NewAdjacencyListDirectedGraphWithInterface(directedGraph IDirectedGraph) *AdjacencyListDirectedGraph {
 	var succ []int
 	nodes := make([]int, directedGraph.GetNbNodes()+1)
 	for i := 0; i < directedGraph.GetNbNodes(); i++ {
@@ -165,5 +165,4 @@ func (a AdjacencyListDirectedGraph) ComputeInverse() IDirectedGraph {
 		nodes[i+1] = len(succ)
 	}
 	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ}
-
 }

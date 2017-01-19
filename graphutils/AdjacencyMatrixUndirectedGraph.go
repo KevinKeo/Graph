@@ -15,7 +15,7 @@ type AdjacencyMatrixUndirectedGraph struct {
 /*
 NewAdjacencyMatrixUndirectedGraph initialize a pointer to a new AdjacencyMatrixUndirectedGraph with a [][]int parameter
 */
-func NewAdjacencyMatrixUndirectedGraph(mat [][]int) *AdjacencyMatrixUndirectedGraph {
+func NewAdjacencyMatrixUndirectedGraphWithMatrix(mat [][]int) *AdjacencyMatrixUndirectedGraph {
 	var edges int
 	for i, v1 := range mat {
 		for j, v2 := range v1 {
@@ -25,6 +25,11 @@ func NewAdjacencyMatrixUndirectedGraph(mat [][]int) *AdjacencyMatrixUndirectedGr
 		}
 	}
 	return &AdjacencyMatrixUndirectedGraph{len(mat), edges, mat}
+}
+
+//ADD COMMENT HERE
+func NewAdjacencyMatrixUndirectedGraphWithInterface(undirectedGraph IUndirectedGraph) *AdjacencyMatrixUndirectedGraph {
+	return &AdjacencyMatrixUndirectedGraph{undirectedGraph.GetNbNodes(), undirectedGraph.GetNbEdges(), undirectedGraph.ToAdjacencyMatrix()}
 }
 
 //GetNbEdges gives the number of edges in the graph
