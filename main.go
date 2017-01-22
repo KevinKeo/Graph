@@ -8,7 +8,7 @@ import (
 func main() {
 
 	graph := GenerateGraphData(4, 4, true)
-	c := NewAdjacencyMatrixUndirectedGraph(graph)
+	c := NewAdjacencyMatrixUndirectedGraphWithMatrix(graph)
 	fmt.Println("MatrixGraph")
 	printGraph(c.ToAdjacencyMatrix())
 	adjacencyList := NewAdjacencyListUndirectedGraphWithMatrix(c.ToAdjacencyMatrix())
@@ -47,7 +47,7 @@ func main() {
 	c.RemoveEdge(0, 2)
 	printGraph(c.Matrice)*/
 	graph = GenerateGraphData(4, 6, false)
-	c = NewAdjacencyMatrixUndirectedGraph(graph)
+	c = NewAdjacencyMatrixUndirectedGraphWithMatrix(graph)
 	fmt.Println(graph)
 	listDirected := NewAdjacencyListDirectedGraphWithMatrix(graph)
 	fmt.Println("matrix")

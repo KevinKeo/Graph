@@ -59,12 +59,16 @@ func (a AdjacencyListUndirectedGraph) GetNbEdges() int {
 
 //IsEdge return true if there is an edge between x and y
 func (a AdjacencyListUndirectedGraph) IsEdge(x int, y int) bool {
-	if x < 0 || y < 0 || y > a.NbNodes || x > a.NbNodes {
+	if x < 0 || y < 0 || y >= a.NbNodes || x >= a.NbNodes {
 		return false
 	}
 	for i := a.listNode[x]; i < a.listNode[x+1]; i++ {
 		if a.succ[i] == y {
-			return true
+			for j := a.listNode[y]; j < a.listNode[y+1]; j++ {
+				if a.succ[j] == x {
+					return true
+				}
+			}
 		}
 	}
 	return false
@@ -72,7 +76,7 @@ func (a AdjacencyListUndirectedGraph) IsEdge(x int, y int) bool {
 
 //RemoveEdge removes an edge (x,y) if exists
 func (a *AdjacencyListUndirectedGraph) RemoveEdge(x int, y int) {
-	if x < 0 || y < 0 || y > a.NbNodes || x > a.NbNodes || x == y {
+	if x < 0 || y < 0 || y >= a.NbNodes || x >= a.NbNodes || x == y {
 		return
 	}
 	for i := a.listNode[x]; i < a.listNode[x+1]; i++ {
@@ -100,7 +104,7 @@ func (a *AdjacencyListUndirectedGraph) reduceNumberEdge(nodePos, succPos int) {
 
 //AddEdge add an edge (x,y) if not already present
 func (a *AdjacencyListUndirectedGraph) AddEdge(x int, y int) {
-	if x < 0 || y < 0 || y > a.NbNodes || x > a.NbNodes || x == y {
+	if x < 0 || y < 0 || y >= a.NbNodes || x >= a.NbNodes || x == y {
 		return
 	}
 	for i := a.listNode[x]; i < a.listNode[x+1]; i++ {

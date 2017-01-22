@@ -52,12 +52,15 @@ func (a AdjacencyMatrixUndirectedGraph) IsEdge(i int, j int) bool {
 	if i >= len(a.matrice) || j >= len(a.matrice) || i < 0 || j < 0 {
 		return false
 	}
-	return a.matrice[i][j] == 1
+	return a.matrice[i][j] == 1 && a.matrice[j][i] == 1
 }
 
 //AddEdge add a new edge between i and j, requires i != j
 func (a *AdjacencyMatrixUndirectedGraph) AddEdge(i int, j int) {
-	if i >= len(a.matrice) || j >= len(a.matrice) || i == j {
+	if i >= len(a.matrice) || j >= len(a.matrice) || i == j || i < 0 || j < 0 {
+		return
+	}
+	if a.matrice[i][j] == 1 {
 		return
 	}
 	a.matrice[i][j] = 1
@@ -67,7 +70,10 @@ func (a *AdjacencyMatrixUndirectedGraph) AddEdge(i int, j int) {
 
 //RemoveEdge remove a edge between i and j, requires i!=j
 func (a *AdjacencyMatrixUndirectedGraph) RemoveEdge(i int, j int) {
-	if i >= len(a.matrice) || j >= len(a.matrice) || i == j {
+	if i >= len(a.matrice) || j >= len(a.matrice) || i == j || i < 0 || j < 0 {
+		return
+	}
+	if a.matrice[i][j] == 0 {
 		return
 	}
 	a.matrice[i][j] = 0
