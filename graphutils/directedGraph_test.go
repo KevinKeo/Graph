@@ -73,8 +73,10 @@ func init() {
 	for i := 0; i < len(testDirected_cases); i++ {
 		matrix := testDirected_cases[i].matrix
 		m1 := NewAdjacencyListDirectedGraphWithMatrix(matrix)
-		m2 := NewAdjacencyListDirectedGraphWithInterface(m1)
-		testDirected_cases[i].directedGraph = []IDirectedGraph{m1, m2}
+		m2 := NewAdjacencyMatrixDirectedGraphWithMatrix(matrix)
+		m3 := NewAdjacencyListDirectedGraphWithInterface(m2)
+		m4 := NewAdjacencyMatrixDirectedGraphWithInterface(m1)
+		testDirected_cases[i].directedGraph = []IDirectedGraph{m1, m2, m3, m4}
 
 		l := len(matrix)
 		var s rand.Source
@@ -90,7 +92,6 @@ func init() {
 			testDirected_cases[i].removeArc = append(testDirected_cases[i].removeArc, couple{x, y})
 		}
 	}
-
 }
 
 func TestInitDirectedGraph(t *testing.T) {

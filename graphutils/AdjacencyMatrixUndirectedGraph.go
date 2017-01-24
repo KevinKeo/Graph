@@ -17,17 +17,18 @@ NewAdjacencyMatrixUndirectedGraph initialize a pointer to a new AdjacencyMatrixU
 */
 func NewAdjacencyMatrixUndirectedGraphWithMatrix(mat [][]int) *AdjacencyMatrixUndirectedGraph {
 	var edges int
-	for i, v1 := range mat {
-		for j, v2 := range v1 {
-			if j > i {
-				edges += v2
+	nodes := len(mat)
+	for i := 0; i < nodes; i++ {
+		for j := 0; j < nodes; j++ {
+			if j > i && mat[i][j] != 0 {
+				edges++
 			}
 		}
 	}
-	return &AdjacencyMatrixUndirectedGraph{len(mat), edges, mat}
+	return &AdjacencyMatrixUndirectedGraph{nodes, edges, mat}
 }
 
-//ADD COMMENT HERE
+//NewAdjacencyMatrixUndirectedGraphWithInterface initialize a pointer to a new AdjacencyMatrixUndirectedGraph taking in parameter a IUndirectedGraph
 func NewAdjacencyMatrixUndirectedGraphWithInterface(undirectedGraph IUndirectedGraph) *AdjacencyMatrixUndirectedGraph {
 	return &AdjacencyMatrixUndirectedGraph{undirectedGraph.GetNbNodes(), undirectedGraph.GetNbEdges(), undirectedGraph.ToAdjacencyMatrix()}
 }
