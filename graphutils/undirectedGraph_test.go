@@ -2,9 +2,11 @@
 Package graph provides a generic framework to manipulate simple graph
 Containing representation of different simple type of graphs and implements method to work with them
 */
+
 package graph
 
 import (
+	"math"
 	"math/rand"
 	"testing"
 	"time"
@@ -19,42 +21,42 @@ var testUndirected_cases = []struct {
 	undirectedGraph []IUndirectedGraph
 }{
 	{
-		[][]int{{0, 1, 1, 1}, {1, 0, 0, 0}, {1, 0, 0, 1}, {1, 0, 1, 0}},
+		[][]int{{math.MaxInt64, 1, 1, 1}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, 1}, {1, math.MaxInt64, 1, math.MaxInt64}},
 		4,
 		[]couple{{1, 2}, {1, 3}, {3, 3}, {2, 3}},
 		[]couple{{1, 3}, {1, 1}, {2, 3}, {1, 2}},
 		[]IUndirectedGraph{},
 	},
 	{
-		[][]int{{0, 1, 0, 0, 1}, {1, 0, 1, 1, 0}, {0, 1, 0, 0, 1}, {0, 1, 0, 0, 0}, {1, 0, 1, 0, 0}},
+		[][]int{{math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, 1}, {1, math.MaxInt64, 1, 1, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, 1}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64}},
 		5,
 		[]couple{},
 		[]couple{},
 		[]IUndirectedGraph{},
 	},
 	{
-		[][]int{{0, 1, 0, 1, 1}, {1, 0, 1, 1, 0}, {0, 1, 0, 1, 1}, {1, 1, 1, 0, 1}, {1, 0, 1, 1, 0}},
+		[][]int{{math.MaxInt64, 1, math.MaxInt64, 1, 1}, {1, math.MaxInt64, 1, 1, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, 1, 1}, {1, 1, 1, math.MaxInt64, 1}, {1, math.MaxInt64, 1, 1, math.MaxInt64}},
 		8,
 		[]couple{},
 		[]couple{},
 		[]IUndirectedGraph{},
 	},
 	{
-		[][]int{{0, 1, 1, 1, 1}, {1, 0, 1, 1, 1}, {1, 1, 0, 1, 1}, {1, 1, 1, 0, 1}, {1, 1, 1, 1, 0}},
+		[][]int{{math.MaxInt64, 1, 1, 1, 1}, {1, math.MaxInt64, 1, 1, 1}, {1, 1, math.MaxInt64, 1, 1}, {1, 1, 1, math.MaxInt64, 1}, {1, 1, 1, 1, math.MaxInt64}},
 		10,
 		[]couple{},
 		[]couple{},
 		[]IUndirectedGraph{},
 	},
 	{
-		[][]int{{0, 1, 1, 0, 0, 0, 0, 0, 0}, {1, 0, 0, 1, 1, 0, 0, 0, 0}, {1, 0, 0, 0, 0, 1, 1, 1, 0}, {0, 1, 0, 0, 0, 0, 0, 0, 1}, {0, 1, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 0, 0, 0, 0, 0}},
+		[][]int{{math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1, 1, 1, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}},
 		8,
 		[]couple{},
 		[]couple{},
 		[]IUndirectedGraph{},
 	},
 	{
-		[][]int{{0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}},
+		[][]int{{math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}},
 		0,
 		[]couple{},
 		[]couple{},
@@ -131,7 +133,7 @@ func TestAddEdge(t *testing.T) {
 			for _, graph := range cases.undirectedGraph {
 				wasEdge := graph.IsEdge(coord.lig, coord.col)
 				nbEdge := graph.GetNbEdges()
-				graph.AddEdge(coord.lig, coord.col)
+				graph.AddEdge(coord.lig, coord.col, 2)
 				isEdge := graph.IsEdge(coord.lig, coord.col)
 				if isEdge {
 					if coord.lig == coord.col {
@@ -177,7 +179,7 @@ func TestRemoveEdge(t *testing.T) {
 					if graph.GetNbEdges() != nbEdge-1 {
 						t.Fatalf("The edge (%d,%d) was removed, but the number of edge was %d, and now is %d and it should be %d", coord.lig, coord.col, nbEdge, graph.GetNbEdges(), nbEdge-1)
 					}
-					graph.AddEdge(coord.lig, coord.col)
+					graph.AddEdge(coord.lig, coord.col, 2)
 				} else {
 					if isEdge {
 						t.Fatalf("There was not an edge initialy between %d and %d and after using RemoveEdge, there is", coord.lig, coord.col)
@@ -198,10 +200,10 @@ func TestIsEdge(t *testing.T) {
 			for i, col := range cases.matrix {
 				for j, v := range col {
 					isEdge := graph.IsEdge(i, j)
-					if isEdge && v == 0 {
+					if isEdge && v == math.MaxInt64 {
 						t.Fatalf("The method IsEdge result is %s but there should not have an edge between %d and %d.", isEdge, i, j)
 					}
-					if !isEdge && v != 0 {
+					if !isEdge && v != math.MaxInt64 {
 						t.Fatalf("The method IsEdge result is %s but there should have an edge between %d and %d.", isEdge, i, j)
 					}
 				}
@@ -217,7 +219,7 @@ func TestGetNeighbors(t *testing.T) {
 			for i := 0; i < len(cases.matrix); i++ {
 				cpt := 0
 				for j := 0; j < len(cases.matrix[i]); j++ {
-					if cases.matrix[i][j] != 0 {
+					if cases.matrix[i][j] != math.MaxInt64 {
 						cpt++
 					}
 				}
@@ -226,7 +228,7 @@ func TestGetNeighbors(t *testing.T) {
 					t.Fatalf("The node %d should have %d neighbors but have %d", i, len(neighbors), cpt)
 				}
 				for _, j := range graph.GetNeighbors(i) {
-					if cases.matrix[i][j] == 0 {
+					if cases.matrix[i][j] == math.MaxInt64 {
 						t.Fatalf("The node %d should have been a neighbor of %d.", i, j)
 					}
 				}

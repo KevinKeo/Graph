@@ -5,6 +5,7 @@ Containing representation of different simple type of graphs and implements meth
 package graph
 
 import (
+	"math"
 	"testing"
 )
 
@@ -26,14 +27,14 @@ func TestGenerateGraphSym(t *testing.T) {
 				break
 			}
 			if i == j {
-				if graph[i][j] != 0 {
+				if graph[i][j] != math.MaxInt64 {
 					t.Fatalf("The diagonal of the matrix should be equal to 0 and not %d", graph[i][j])
 				}
 			}
 			if graph[i][j] != graph[j][i] {
 				t.Fatalf("The value in (%d,%d)=%d should be equal to (%d,%d)=%d", i, j, graph[i][j], j, i, graph[j][i])
 			}
-			if graph[i][j] != 0 {
+			if graph[i][j] != math.MaxInt64 {
 				cptEdge++
 			}
 		}
@@ -54,11 +55,11 @@ func TestGenerateGraph(t *testing.T) {
 	for i, v1 := range graph {
 		for j := range v1 {
 			if i == j {
-				if graph[i][j] != 0 {
+				if graph[i][j] != math.MaxInt64 {
 					t.Fatalf("The diagonal of the matrix should be equal to 0 and not %d", graph[i][j])
 				}
 			}
-			if graph[i][j] != 0 {
+			if graph[i][j] != math.MaxInt64 {
 				cptEdge++
 			}
 		}

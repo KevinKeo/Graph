@@ -4,6 +4,8 @@ Containing representation of different simple type of graphs and implements meth
 */
 package graph
 
+import "math"
+
 /*
 AdjacencyMatrixUndirectedGraph represent a Undirected Adjacency Matrix
 */
@@ -20,12 +22,12 @@ func NewAdjacencyMatrixUndirectedGraphWithMatrix(mat [][]int) *AdjacencyMatrixUn
 	nodes := len(mat)
 	for i := 0; i < nodes; i++ {
 		for j := 0; j < nodes; j++ {
-			if j > i && mat[i][j] != 0 {
+			if mat[i][j] != math.MaxInt64 {
 				edges++
 			}
 		}
 	}
-	return &AdjacencyMatrixUndirectedGraph{nodes, edges, mat}
+	return &AdjacencyMatrixUndirectedGraph{nodes, edges / 2, mat}
 }
 
 //NewAdjacencyMatrixUndirectedGraphWithInterface initialize a pointer to a new AdjacencyMatrixUndirectedGraph taking in parameter a IUndirectedGraph
@@ -53,19 +55,19 @@ func (a AdjacencyMatrixUndirectedGraph) IsEdge(i int, j int) bool {
 	if i >= len(a.matrice) || j >= len(a.matrice) || i < 0 || j < 0 {
 		return false
 	}
-	return a.matrice[i][j] == 1 && a.matrice[j][i] == 1
+	return a.matrice[i][j] != math.MaxInt64 && a.matrice[j][i] == a.matrice[i][j]
 }
 
 //AddEdge add a new edge between i and j, requires i != j
-func (a *AdjacencyMatrixUndirectedGraph) AddEdge(i int, j int) {
+func (a *AdjacencyMatrixUndirectedGraph) AddEdge(i int, j int, p int) {
 	if i >= len(a.matrice) || j >= len(a.matrice) || i == j || i < 0 || j < 0 {
 		return
 	}
-	if a.matrice[i][j] == 1 {
+	if a.matrice[i][j] != math.MaxInt64 {
 		return
 	}
-	a.matrice[i][j] = 1
-	a.matrice[j][i] = 1
+	a.matrice[i][j] = p
+	a.matrice[j][i] = p
 	a.NbEdges += 1
 }
 
@@ -74,11 +76,11 @@ func (a *AdjacencyMatrixUndirectedGraph) RemoveEdge(i int, j int) {
 	if i >= len(a.matrice) || j >= len(a.matrice) || i == j || i < 0 || j < 0 {
 		return
 	}
-	if a.matrice[i][j] == 0 {
+	if a.matrice[i][j] == math.MaxInt64 {
 		return
 	}
-	a.matrice[i][j] = 0
-	a.matrice[j][i] = 0
+	a.matrice[i][j] = math.MaxInt64
+	a.matrice[j][i] = math.MaxInt64
 	a.NbEdges -= 1
 	/*
 	   a.Matrice = GenerateGraphData(1, 0, false)
@@ -90,9 +92,13 @@ func (a *AdjacencyMatrixUndirectedGraph) RemoveEdge(i int, j int) {
 //GetNeighbors returns a new slice of int containing neighbors of node i
 func (a AdjacencyMatrixUndirectedGraph) GetNeighbors(i int) (neighbors []int) {
 	for node, value := range a.matrice[i] {
-		if value == 1 {
+		if value != math.MaxInt64 {
 			neighbors = append(neighbors, node)
 		}
 	}
 	return neighbors
+}
+
+func (a AdjacencyMatrixUndirectedGraph) GetWeight(x, y int) int {
+	return a.matrice[x][y]
 }

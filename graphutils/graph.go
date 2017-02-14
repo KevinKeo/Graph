@@ -5,6 +5,7 @@ Containing representation of different simple type of graphs and implements meth
 package graph
 
 import (
+	"math"
 	"math/rand"
 	"time"
 )
@@ -25,8 +26,9 @@ type IUndirectedGraph interface {
 	GetNbEdges() int
 	IsEdge(int, int) bool
 	RemoveEdge(int, int)
-	AddEdge(int, int)
+	AddEdge(int, int, int)
 	GetNeighbors(int) []int
+	GetWeight(int, int) int
 }
 
 //IDirectedGraph interface to manipulate oriented graph
@@ -35,10 +37,11 @@ type IDirectedGraph interface {
 	GetNbArcs() int
 	IsArc(int, int) bool
 	RemoveArc(int, int)
-	AddArc(int, int)
+	AddArc(int, int, int)
 	GetSuccessors(int) []int
 	GetPredecessors(int) []int
 	ComputeInverse() IDirectedGraph
+	GetWeight(int, int) int
 }
 
 /*
@@ -71,11 +74,18 @@ func GenerateGraphData(n int, m int, s bool) (graph [][]int) {
 		}
 		list = append(list[:i], list[i+1:]...)
 	}
-
+	for x := 0; x < len(graph); x++ {
+		for y := 0; y < len(graph); y++ {
+			if graph[x][y] == 0 {
+				graph[x][y] = math.MaxInt64
+			}
+		}
+	}
 	return graph
 
 }
 
+/*
 //GenerateGraphDataBis is another implementation of generate graph
 func GenerateGraphDataBis(n int, m int, s bool) (graph [][]int) {
 	graph = make([][]int, n)
@@ -116,7 +126,7 @@ func GenerateGraphDataBis(n int, m int, s bool) (graph [][]int) {
 	}
 	return graph
 }
-
+*/
 /**
 //checkNodes check if node x and y are not superior to the nb of nodes, and not inferior to 0
 func checkNodes(x, y, length int) bool {

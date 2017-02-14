@@ -5,6 +5,7 @@ Containing representation of different simple type of graphs and implements meth
 package graph
 
 import (
+	"math"
 	"math/rand"
 	"testing"
 	"time"
@@ -19,49 +20,49 @@ var testDirected_cases = []struct {
 	directedGraph []IDirectedGraph
 }{
 	{
-		[][]int{{0, 1, 0, 1}, {0, 0, 0, 0}, {0, 0, 0, 1}, {0, 1, 0, 0}},
+		[][]int{{math.MaxInt64, 1, math.MaxInt64, 1}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, 1}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64}},
 		4,
 		[]couple{{1, 3}, {0, 2}},
 		[]couple{{3, 1}},
 		[]IDirectedGraph{},
 	},
 	{
-		[][]int{{0, 1}, {0, 0}},
+		[][]int{{math.MaxInt64, 1}, {math.MaxInt64, math.MaxInt64}},
 		1,
 		[]couple{},
 		[]couple{},
 		[]IDirectedGraph{},
 	},
 	{
-		[][]int{{0, 1, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 1, 0, 1, 0}, {1, 0, 0, 0, 0}, {0, 1, 0, 0, 0}},
+		[][]int{{math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, 1, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64}},
 		5,
 		[]couple{},
 		[]couple{},
 		[]IDirectedGraph{},
 	},
 	{
-		[][]int{{0, 0, 1, 1, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 1, 0, 0, 0}},
+		[][]int{{math.MaxInt64, math.MaxInt64, 1, 1, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64}},
 		3,
 		[]couple{},
 		[]couple{},
 		[]IDirectedGraph{},
 	},
 	{
-		[][]int{{0, 0, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 1, 0}, {0, 1, 0, 0, 0, 1}, {1, 0, 0, 0, 0, 0}},
+		[][]int{{math.MaxInt64, math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}},
 		7,
 		[]couple{},
 		[]couple{},
 		[]IDirectedGraph{},
 	},
 	{
-		[][]int{{0, 1, 1, 1, 1}, {1, 0, 1, 1, 1}, {1, 1, 0, 1, 1}, {1, 1, 1, 0, 1}, {1, 1, 1, 1, 0}},
+		[][]int{{math.MaxInt64, 1, 1, 1, 1}, {1, math.MaxInt64, 1, 1, 1}, {1, 1, math.MaxInt64, 1, 1}, {1, 1, 1, math.MaxInt64, 1}, {1, 1, 1, 1, math.MaxInt64}},
 		20,
 		[]couple{},
 		[]couple{},
 		[]IDirectedGraph{},
 	},
 	{
-		[][]int{{0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}},
+		[][]int{{math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}},
 		0,
 		[]couple{},
 		[]couple{},
@@ -142,7 +143,7 @@ func TestAddArc(t *testing.T) {
 		for _, coord := range cases.addArc {
 			for _, graph := range cases.directedGraph {
 				wasArc := graph.IsArc(coord.lig, coord.col)
-				graph.AddArc(coord.lig, coord.col)
+				graph.AddArc(coord.lig, coord.col, 2)
 				result := graph.IsArc(coord.lig, coord.col)
 				if result {
 					if coord.lig == coord.col {
@@ -177,7 +178,7 @@ func TestRemoveArc(t *testing.T) {
 					t.Fatalf("There was not an arc initialy from %d to %d and after using RemoveArc, there is", coord.lig, coord.col)
 				}
 				if wasArc {
-					graph.AddArc(coord.lig, coord.col)
+					graph.AddArc(coord.lig, coord.col, 2)
 				}
 			}
 		}
@@ -191,10 +192,10 @@ func TestIsArc(t *testing.T) {
 			for i, col := range cases.matrix {
 				for j, v := range col {
 					isArc := graph.IsArc(i, j)
-					if isArc && v == 0 {
+					if isArc && v == math.MaxInt64 {
 						t.Fatalf("The method isArc result is %s but there should not have an arc from %d to %d.", isArc, i, j)
 					}
-					if !isArc && v != 0 {
+					if !isArc && v != math.MaxInt64 {
 						t.Fatalf("The method isArc result is %s but there should have an arc from %d to %d.", isArc, i, j)
 					}
 				}

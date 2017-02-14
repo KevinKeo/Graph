@@ -4,6 +4,10 @@ Containing representation of different simple type of graphs and implements meth
 */
 package graph
 
+import (
+	"math"
+)
+
 /*
  */
 type AdjacencyMatrixDirectedGraph struct {
@@ -19,7 +23,7 @@ func NewAdjacencyMatrixDirectedGraphWithMatrix(mat [][]int) *AdjacencyMatrixDire
 	nodes := len(mat)
 	for i := 0; i < len(mat); i++ {
 		for j := 0; j < len(mat); j++ {
-			if mat[i][j] != 0 {
+			if mat[i][j] != math.MaxInt64 {
 				arcs++
 			}
 		}
@@ -50,7 +54,7 @@ func (a AdjacencyMatrixDirectedGraph) IsArc(x, y int) bool {
 	if x < 0 || y < 0 || x >= a.NbNodes || y >= a.NbNodes {
 		return false
 	}
-	if a.matrice[x][y] != 0 {
+	if a.matrice[x][y] != math.MaxInt64 {
 		return true
 	}
 	return false
@@ -60,14 +64,22 @@ func (a *AdjacencyMatrixDirectedGraph) RemoveArc(x, y int) {
 	if x < 0 || y < 0 || x >= a.NbNodes || y >= a.NbNodes {
 		return
 	}
-	a.matrice[x][y] = 0
+	if a.matrice[x][y] == math.MaxInt64 {
+		return
+	}
+	a.matrice[x][y] = math.MaxInt64
+	a.nbArcs--
 }
 
-func (a *AdjacencyMatrixDirectedGraph) AddArc(x, y int) {
+func (a *AdjacencyMatrixDirectedGraph) AddArc(x, y, p int) {
 	if x < 0 || y < 0 || x >= a.NbNodes || y >= a.NbNodes || x == y {
 		return
 	}
-	a.matrice[x][y] = 1
+	if a.matrice[x][y] != math.MaxInt64 {
+		return
+	}
+	a.matrice[x][y] = p
+	a.nbArcs++
 }
 
 func (a AdjacencyMatrixDirectedGraph) GetSuccessors(x int) (succ []int) {
@@ -75,7 +87,7 @@ func (a AdjacencyMatrixDirectedGraph) GetSuccessors(x int) (succ []int) {
 		return succ
 	}
 	for n, v := range a.matrice[x] {
-		if v != 0 {
+		if v != math.MaxInt64 {
 			succ = append(succ, n)
 		}
 	}
@@ -87,7 +99,7 @@ func (a AdjacencyMatrixDirectedGraph) GetPredecessors(x int) (pred []int) {
 		return pred
 	}
 	for i := 0; i < a.NbNodes; i++ {
-		if a.matrice[i][x] != 0 {
+		if a.matrice[i][x] != math.MaxInt64 {
 			pred = append(pred, i)
 		}
 	}
@@ -106,4 +118,8 @@ func (a AdjacencyMatrixDirectedGraph) ComputeInverse() IDirectedGraph {
 		}
 	}
 	return &AdjacencyMatrixDirectedGraph{a.NbNodes, a.NbNodes, mat}
+}
+
+func (a AdjacencyMatrixDirectedGraph) GetWeight(x, y int) int {
+	return a.matrice[x][y]
 }

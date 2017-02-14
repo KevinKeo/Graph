@@ -3,71 +3,50 @@ package main
 import (
 	"fmt"
 	. "github.com/kevin/Graph/graphutils"
+	"math"
 )
 
 func main() {
 
-	graph := GenerateGraphData(4, 4, true)
-	c := NewAdjacencyMatrixUndirectedGraphWithMatrix(graph)
-	fmt.Println("MatrixGraph")
-	printGraph(c.ToAdjacencyMatrix())
-	adjacencyList := NewAdjacencyListUndirectedGraphWithMatrix(c.ToAdjacencyMatrix())
-	fmt.Println(adjacencyList)
-	fmt.Println("graph adjancy list")
-	printGraph(adjacencyList.ToAdjacencyMatrix())
-	fmt.Println(c.IsEdge(0, 2))
-	fmt.Println("remove before", adjacencyList.NbEdges)
-	adjacencyList.RemoveEdge(0, 1)
-	fmt.Println("remove after", adjacencyList.NbEdges)
-	fmt.Println(adjacencyList)
-	printGraph(adjacencyList.ToAdjacencyMatrix())
-	fmt.Println("//////////////////////////////////////")
-	fmt.Println("add")
-	fmt.Println(adjacencyList)
-	fmt.Println("add before", adjacencyList.NbEdges)
-	adjacencyList.AddEdge(0, 1)
-	fmt.Println("add after", adjacencyList.NbEdges)
-	fmt.Println(adjacencyList)
-	printGraph(adjacencyList.ToAdjacencyMatrix())
+	matD := [][]int{{math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}}
+	matU := [][]int{{math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1}, {1, math.MaxInt64, math.MaxInt64, 1, 1, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, 1, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {math.MaxInt64, math.MaxInt64, 1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}, {1, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64, math.MaxInt64}}
+	directedGraph := NewAdjacencyListDirectedGraphWithMatrix(matD)
+	undirectedGraph := NewAdjacencyListUndirectedGraphWithMatrix(matU)
+	fmt.Println(ExplorGraphDirectedInWidth(directedGraph, 0), "test")
+	fmt.Println(ExplorGraphUndirectedInWidth(undirectedGraph, 0), "test")
+	fmt.Println(ExplorerGraphDirectedInDepth(directedGraph, 0, make([]int, 0)))
+	fmt.Println(ExplorerGraphUndirectedInDepth(undirectedGraph, 0, make([]int, 0)))
 
-	var in IUndirectedGraph
-	in = c
-	fmt.Println("Neighbors :", in.GetNeighbors(0))
-	in = adjacencyList
-	fmt.Println("Neighbors :", in.GetNeighbors(0))
+	binarytree := NewTree()
+	binarytree.AddElem(6)
+	binarytree.AddElem(8)
+	binarytree.AddElem(4)
+	binarytree.AddElem(5)
+	binarytree.PrintTree()
+	binarytree.DeleteFirstElem()
 
-	/*fmt.Println("/////////////////////////////////")
-	in = c
-	printGraph(c.Matrice)
-	fmt.Println("test")
-	c.AddEdge(0, 2)
-	printGraph(c.Matrice)
-	fmt.Println("Neighbors :", in.GetNeighbors(0))
-	fmt.Println("test")
-	c.RemoveEdge(0, 2)
-	printGraph(c.Matrice)*/
-	graph = GenerateGraphData(4, 6, false)
-	c = NewAdjacencyMatrixUndirectedGraphWithMatrix(graph)
-	fmt.Println(graph)
-	listDirected := NewAdjacencyListDirectedGraphWithMatrix(graph)
-	fmt.Println("matrix")
-	printGraph(c.ToAdjacencyMatrix())
-	fmt.Println("list")
-	printGraph(listDirected.ToAdjacencyMatrix())
-	fmt.Println(listDirected.GetSuccessors(1))
-	fmt.Println(listDirected.GetPredecessors(3))
-	fmt.Println("listinverse")
-	printGraph(listDirected.ComputeInverse().ToAdjacencyMatrix())
+	binarytree.PrintTree()
 
-	fmt.Println("list")
-	listDirected.RemoveArc(0, 1)
-	printGraph(listDirected.ToAdjacencyMatrix())
-	fmt.Println("test")
-	printGraph(listDirected.ToAdjacencyMatrix())
-	newList := NewAdjacencyListDirectedGraphWithInterface(listDirected)
+	binarytree.AddElem(1)
+	binarytree.AddElem(2)
+	binarytree.AddElem(3)
+	binarytree.AddElem(1)
+	binarytree.AddElem(2)
+	binarytree.AddElem(3)
+	binarytree.PrintTree()
 
-	fmt.Println("test")
-	printGraph(newList.ToAdjacencyMatrix())
+	binarytree.DeleteFirstElem()
+
+	binarytree.DeleteFirstElem()
+
+	binarytree.DeleteFirstElem()
+
+	binarytree.DeleteFirstElem()
+
+	binarytree.PrintTree()
+	binarytree.DeleteFirstElem()
+	binarytree.PrintTree()
+	fmt.Println(FirstPathChecker(undirectedGraph, 0))
 }
 
 func printGraph(g [][]int) {

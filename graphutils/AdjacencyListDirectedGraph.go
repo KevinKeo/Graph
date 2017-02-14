@@ -4,46 +4,58 @@ Containing representation of different simple type of graphs and implements meth
 */
 package graph
 
+import "math"
+
 //AdjacencyListDirectGraph represents an directed graph in the form of an adjacency List
 type AdjacencyListDirectedGraph struct {
-	NbNodes, NbArcs int
-	listNode, succ  []int
+	NbNodes, NbArcs        int
+	listNode, succ, weight []int
 }
 
 //NewAdjacencyListDirectedGraphWithMatrix create a new AdjacencyListDirectGraph's pointer
 func NewAdjacencyListDirectedGraphWithMatrix(generatedGraph [][]int) *AdjacencyListDirectedGraph {
 	nodes := make([]int, len(generatedGraph)+1)
 	var succ []int
+	var weight []int
 	for i, s := range generatedGraph {
 		for j, v := range s {
-			if v == 1 {
+			if v != math.MaxInt64 {
 				succ = append(succ, j)
+				weight = append(weight, v)
 			}
 		}
 		nodes[i+1] = len(succ)
 	}
-	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ}
+	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ, weight}
 }
 
 //NewAdjacencyListDirectedGraphWithInterface create a new AdjacencyListDirectGraph's pointer
 func NewAdjacencyListDirectedGraphWithInterface(directedGraph IDirectedGraph) *AdjacencyListDirectedGraph {
 	var succ []int
+	var weight []int
 	nodes := make([]int, directedGraph.GetNbNodes()+1)
 	for i := 0; i < directedGraph.GetNbNodes(); i++ {
 		succ = append(succ, directedGraph.GetSuccessors(i)...)
 		nodes[i+1] = len(succ)
+		for j := nodes[i]; j < nodes[i+1]; j++ {
+			weight = append(weight, directedGraph.GetWeight(i, succ[j]))
+		}
 	}
-	return &AdjacencyListDirectedGraph{directedGraph.GetNbNodes(), directedGraph.GetNbArcs(), nodes, succ}
+	return &AdjacencyListDirectedGraph{directedGraph.GetNbNodes(), directedGraph.GetNbArcs(), nodes, succ, weight}
 }
 
 //ToAdjacencyMatrix return the adjacency matrix
 func (a AdjacencyListDirectedGraph) ToAdjacencyMatrix() [][]int {
 	matrix := make([][]int, a.GetNbNodes())
-
-	for i := 0; i < a.GetNbNodes(); i++ {
+	for i := 0; i < len(matrix); i++ {
 		matrix[i] = make([]int, a.NbNodes)
+		for j := 0; j < len(matrix); j++ {
+			matrix[i][j] = math.MaxInt64
+		}
+	}
+	for i := 0; i < a.GetNbNodes(); i++ {
 		for j := a.listNode[i]; j < a.listNode[i+1]; j++ {
-			matrix[i][a.succ[j]] = 1
+			matrix[i][a.succ[j]] = a.weight[j]
 		}
 	}
 	return matrix
@@ -91,13 +103,14 @@ func (a *AdjacencyListDirectedGraph) RemoveArc(x int, y int) {
 //reduceNumberArc delete an edge
 func (a *AdjacencyListDirectedGraph) reduceNumberArc(nodePos, succPos int) {
 	a.succ = append(a.succ[:succPos], a.succ[succPos+1:]...)
+	a.weight = append(a.weight[:succPos], a.weight[succPos+1:]...)
 	for nodePos = nodePos + 1; nodePos < len(a.listNode); nodePos++ {
 		a.listNode[nodePos] -= 1
 	}
 }
 
 //AddArc add an arc from x to y if not already present
-func (a *AdjacencyListDirectedGraph) AddArc(x int, y int) {
+func (a *AdjacencyListDirectedGraph) AddArc(x int, y int, p int) {
 	if x < 0 || y < 0 || y > a.NbNodes || x > a.NbNodes || x == y {
 		return
 	}
@@ -106,17 +119,19 @@ func (a *AdjacencyListDirectedGraph) AddArc(x int, y int) {
 			return
 		}
 	}
-	a.augmentNumberArc(x, y)
+	a.augmentNumberArc(x, y, p)
 	a.NbArcs += 1
 }
 
 //augmentNumberArc add an arc from x to y
-func (a *AdjacencyListDirectedGraph) augmentNumberArc(node int, succ int) {
+func (a *AdjacencyListDirectedGraph) augmentNumberArc(node int, succ int, p int) {
 	ind := a.listNode[node]
 	a.succ = append(a.succ, 0)
 	copy(a.succ[ind+1:], a.succ[ind:])
 	a.succ[ind] = succ
-
+	a.weight = append(a.weight, 0)
+	copy(a.weight[ind+1:], a.weight[ind:])
+	a.weight[ind] = p
 	for node = node + 1; node < len(a.listNode); node++ {
 		a.listNode[node] += 1
 	}
@@ -158,11 +173,23 @@ func (a AdjacencyListDirectedGraph) GetPredecessors(x int) (pred []int) {
 
 //ComputeInverse returns the inverse of the graph
 func (a AdjacencyListDirectedGraph) ComputeInverse() IDirectedGraph {
-	var succ []int
+	var succ, weight []int
 	nodes := make([]int, a.NbNodes+1)
 	for i := 0; i < a.NbNodes; i++ {
 		succ = append(succ, a.GetPredecessors(i)...)
 		nodes[i+1] = len(succ)
+		for j := nodes[i]; j < nodes[i+1]; j++ {
+			weight = append(weight, a.GetWeight(succ[j], i))
+		}
 	}
-	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ}
+	return &AdjacencyListDirectedGraph{len(nodes) - 1, len(succ), nodes, succ, weight}
+}
+
+func (a AdjacencyListDirectedGraph) GetWeight(x, y int) int {
+	for i := a.listNode[x]; i < a.listNode[x+1]; i++ {
+		if a.succ[i] == y {
+			return a.weight[i]
+		}
+	}
+	return math.MaxInt64
 }
